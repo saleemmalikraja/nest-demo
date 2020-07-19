@@ -73,3 +73,27 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
   Nest is [MIT licensed](LICENSE).
+
+
+## STEPS FOLLOWED 
+
+## First step
+
+Please make sure that Node.js (>= 10.13.0) is installed on your operating system.
+
+$ npm i -g @nestjs/cli
+
+$ nest new project-name
+
+
+## Create JSON Server (Will help to perform CRUD operation)
+
+npm install -g json-server
+
+Refer : https://www.npmjs.com/package/json-server
+
+to change port number of json server create json-sever.json and configure port number
+
+
+Generated required mock data( refer dataGenerationScripts folder inside src) and with that db JSON is updated
+
