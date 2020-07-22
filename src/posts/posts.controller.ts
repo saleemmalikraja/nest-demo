@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseFilters, HttpStatus, HttpCode } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseFilters, HttpStatus, HttpCode, ParseIntPipe } from '@nestjs/common';
 import {PostsService} from './posts.service';
 import {CreatePostDto}  from './dto/createPost.dto';
 import {UpdatePostDto}  from './dto/updatePost.dto';
@@ -18,7 +18,7 @@ export class PostsController {
  
   @Get(':id')
   @UseFilters(new HttpExceptionFilter())
-  getPostById(@Param('id') id: string) {
+  getPostById(@Param('id', ParseIntPipe) id: string) {
     return this.postsService.getPostById(Number(id));
   }
  
