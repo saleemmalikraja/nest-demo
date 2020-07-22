@@ -1,36 +1,39 @@
-import { Controller, Get, Param, Post, Put, Body, Delete, HttpException, HttpStatus } from '@nestjs/common';
-import { identity } from 'rxjs';
-
+import { Body, Controller, Delete, Get, Param, Post, Put, UseFilters, HttpStatus, HttpCode } from '@nestjs/common';
+import {PostsService} from './posts.service';
+import {CreatePostDto}  from './dto/createPost.dto';
+import {UpdatePostDto}  from './dto/updatePost.dto';
+import { HttpExceptionFilter } from 'src/filters/http-exception-filter';
+ 
 @Controller('posts')
 export class PostsController {
-
-@Get()
-  getPosts(): string {
-    //return 'This retuns all post';
-    //throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-    throw new HttpException({
-        status: HttpStatus.FORBIDDEN,
-        error: 'This is a custom message',
-      }, HttpStatus.FORBIDDEN);
+  constructor(
+    private readonly postsService: PostsService
+  ) {}
+ 
+  @Get()
+  @HttpCode(202)
+  getAllPosts() {
+    return this.postsService.getAllPosts();
   }
-
+ 
   @Get(':id')
-  getPostsById(@Param('id') id: string) {
-    return `This retuns specific post with ${id}`;
+  @UseFilters(new HttpExceptionFilter())
+  getPostById(@Param('id') id: string) {
+    return this.postsService.getPostById(Number(id));
   }
-
-  @Put(':id')
-  updatePost(@Param('id') id: string, @Body() payload: any){
-      return `This updates post for given id ${id} with the payload ${payload}`;
-  }
-
-  @Delete(':id')
-  deletePost(@Param('id') id: string){
-      return ''
-  }
-
+ 
   @Post()
-  createPost(@Body() payload: any){
-    return `will update the body with this ${payload}`
+  async createPost(@Body() post: CreatePostDto) {
+    return this.postsService.createPost(post);
+  }
+ 
+  @Put(':id')
+  async replacePost(@Param('id') id: string, @Body() post: UpdatePostDto) {
+    return this.postsService.replacePost(Number(id), post);
+  }
+ 
+  @Delete(':id')
+  async deletePost(@Param('id') id: string) {
+    this.postsService.deletePost(Number(id));
   }
 }
